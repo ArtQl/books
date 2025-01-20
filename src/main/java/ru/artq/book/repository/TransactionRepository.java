@@ -8,15 +8,10 @@ import ru.artq.book.entity.Reader;
 import ru.artq.book.entity.Transaction;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
-    List<Transaction> findByDateTimeBetween(LocalDateTime start, LocalDateTime end);
-
-    List<Transaction> findByReaderOrderByDateTimeAsc(Reader reader);
 
     @Query("select t.book.authors from Transaction t " +
             "where t.dateTime between :start and :end " +

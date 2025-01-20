@@ -2,7 +2,6 @@ package ru.artq.book.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.artq.book.entity.*;
@@ -19,19 +18,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final ReaderRepository readerRepository;
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
-
-    @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository, ReaderRepository readerRepository, BookRepository bookRepository, AuthorRepository authorRepository) {
-        this.transactionRepository = transactionRepository;
-        this.readerRepository = readerRepository;
-        this.bookRepository = bookRepository;
-        this.authorRepository = authorRepository;
-    }
 
     @Transactional
     @Override
@@ -64,7 +56,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(readOnly = true)
     @Override
     public List<Reader> getReadersWithUnreturnedBooks() {
-        //todo: можно улучшить
+        //todo: можно лучше
         Map<Reader, Integer> unreturnedBooks = transactionRepository.findAll().stream()
                 .collect(Collectors.groupingBy(Transaction::getReader, Collectors.summingInt(tx ->
                         tx.getType() == TransactionType.TAKE ? 1 : -1)));
