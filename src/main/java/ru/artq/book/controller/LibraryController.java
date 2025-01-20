@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.artq.book.entity.Author;
@@ -45,8 +46,8 @@ public class LibraryController {
     })
     @GetMapping("most-popular-author")
     public ResponseEntity<Author> findMostPopularAuthor(
-            @RequestParam LocalDate start,
-            @RequestParam LocalDate end) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
         Author author = transactionService.findMostPopularAuthor(start, end);
         return ResponseEntity.ok(author);
     }
